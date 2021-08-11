@@ -13,7 +13,7 @@ import styled from 'styled-components';
 
 import { createWsEndpoints, CUSTOM_ENDPOINT_KEY } from '@polkadot/apps-config';
 import { Button, Input, Sidebar } from '@polkadot/react-components';
-import { settings } from '@polkadot/ui-settings';
+import settings from '@polkadot/ui-settings';
 import { isAscii } from '@polkadot/util';
 
 import { useTranslation } from '../translate';

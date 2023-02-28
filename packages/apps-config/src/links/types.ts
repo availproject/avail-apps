@@ -3,7 +3,7 @@
 
 import type { BN } from '@polkadot/util';
 
-export type LinkTypes = 'address' | 'block' | 'bounty' | 'council' | 'extrinsic' | 'proposal' | 'referendum' | 'techcomm' | 'tip' | 'treasury';
+export type LinkTypes = 'address' | 'block' | 'bounty'  | 'extrinsic' | 'proposal' | 'referendum' | 'techcomm' | 'tip' | 'treasury';
 
 export interface ExternalDef {
   chains: Record<string, string>;

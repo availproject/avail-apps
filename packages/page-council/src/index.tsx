@@ -29,7 +29,7 @@ function CouncilApp ({ basePath, className }: Props): React.ReactElement<Props> 
   const { pathname } = useLocation();
   const numMotions = useCounter();
   const prime = useCall<AccountId | null>(api.derive.council.prime);
-  const motions = useCall<DeriveCollectiveProposal[]>(api.derive.council.proposals);
+  // const motions = useCall<DeriveCollectiveProposal[]>(api.derive.council.proposals);
 
   const items = useMemo(() => [
     {
@@ -37,11 +37,11 @@ function CouncilApp ({ basePath, className }: Props): React.ReactElement<Props> 
       name: 'overview',
       text: t<string>('Overview')
     },
-    {
-      count: numMotions,
-      name: 'motions',
-      text: t<string>('Motions')
-    }
+    // {
+    //   count: numMotions,
+    //   name: 'motions',
+    //   text: t<string>('Motions')
+    // }
   ], [numMotions, t]);
 
   return (
@@ -50,14 +50,14 @@ function CouncilApp ({ basePath, className }: Props): React.ReactElement<Props> 
         basePath={basePath}
         items={items}
       />
-      <Switch>
+      {/* <Switch>
         <Route path={`${basePath}/motions`}>
           <Motions
             motions={motions}
             prime={prime}
           />
         </Route>
-      </Switch>
+      </Switch> */}
       <Overview
         className={[basePath, `${basePath}/candidates`].includes(pathname) ? '' : '--hidden'}
         prime={prime}

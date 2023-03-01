@@ -5,10 +5,10 @@ import type { DeriveTreasuryProposals } from '@polkadot/api-derive/types';
 
 import React from 'react';
 
-import { Button } from '@polkadot/react-components';
+// import { Button } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 
-import ProposalCreate from './ProposalCreate';
+// import ProposalCreate from './ProposalCreate';
 import Proposals from './Proposals';
 import Summary from './Summary';
 

@@ -11,7 +11,7 @@ import { useBountyStatus } from '../hooks';
 import AwardBounty from './AwardBounty';
 import BountyAcceptCurator from './BountyAcceptCurator';
 import BountyClaimAction from './BountyClaimAction';
-import BountyInitiateVoting from './BountyInitiateVoting';
+// import BountyInitiateVoting from './BountyInitiateVoting';
 import ProposeCuratorAction from './ProposeCuratorAction';
 
 interface Props {

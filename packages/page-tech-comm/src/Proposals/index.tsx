@@ -7,11 +7,11 @@ import type { ComponentProps } from '../types';
 
 import React, { useRef } from 'react';
 
-import { Button, Table } from '@polkadot/react-components';
+import { Table } from '@polkadot/react-components';
 
 import { useTranslation } from '../translate';
 import Proposal from './Proposal';
-import Propose from './Propose';
+// import Propose from './Propose';
 
 interface Props extends ComponentProps {
   defaultProposal?: SubmittableExtrinsicFunction<'promise'>;
@@ -19,7 +19,7 @@ interface Props extends ComponentProps {
   filter?: (section: string, method?: string) => boolean;
 }
 
-function Proposals ({ className = '', defaultProposal, defaultThreshold, filter, isMember, members, prime, proposalHashes, type }: Props): React.ReactElement<Props> {
+function Proposals ({ className = '', isMember, members, prime, proposalHashes, type }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
   const headerRef = useRef<[React.ReactNode?, string?, number?][]>([

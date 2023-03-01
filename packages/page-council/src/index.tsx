@@ -36,12 +36,13 @@ function CouncilApp ({ basePath, className }: Props): React.ReactElement<Props> 
       isRoot: true,
       name: 'overview',
       text: t<string>('Overview')
-    },
+    }
     // {
     //   count: numMotions,
     //   name: 'motions',
     //   text: t<string>('Motions')
     // }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   ], [numMotions, t]);
 
   return (

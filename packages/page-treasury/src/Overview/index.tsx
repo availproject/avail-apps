@@ -28,9 +28,9 @@ function Overview ({ className, isMember, members }: Props): React.ReactElement<
         approvalCount={info?.approvals.length}
         proposalCount={info?.proposals.length}
       />
-      <Button.Group>
+      {/* <Button.Group>
         <ProposalCreate />
-      </Button.Group>
+      </Button.Group> */}
       <Proposals
         isMember={isMember}
         members={members}

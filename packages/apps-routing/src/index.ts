@@ -8,7 +8,7 @@ import accounts from './accounts';
 import addresses from './addresses';
 import alliance from './alliance';
 import assets from './assets';
-// import bounties from './bounties';
+import bounties from './bounties';
 import calendar from './calendar';
 import claims from './claims';
 import collator from './collator';
@@ -37,10 +37,10 @@ import society from './society';
 import staking from './staking';
 import storage from './storage';
 import sudo from './sudo';
-// import techcomm from './techcomm';
+import techcomm from './techcomm';
 import teleport from './teleport';
 import transfer from './transfer';
-// import treasury from './treasury';
+import treasury from './treasury';
 import utilities from './utilities';
 import whitelist from './whitelist';
 
@@ -66,10 +66,10 @@ export default function create (t: TFunction): Routes {
     // old v1 governance
     democracy(t),
     council(t),
-    // techcomm(t),
+    techcomm(t),
     // other governance-related
-    // treasury(t),
-    // bounties(t),
+    treasury(t),
+    bounties(t),
     // others
     parachains(t),
     gilt(t),

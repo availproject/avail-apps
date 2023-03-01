@@ -30,13 +30,13 @@ export function BountyActions ({ bestNumber, description, fee, index, proposals,
 
   return (
     <>
-      {status.isProposed &&
+      {/* {status.isProposed &&
         <BountyInitiateVoting
           description={description}
           index={index}
           proposals={proposals}
         />
-      }
+      } */}
       {status.isFunded &&
         <ProposeCuratorAction
           description={description}

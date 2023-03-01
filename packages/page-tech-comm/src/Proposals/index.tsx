@@ -33,7 +33,7 @@ function Proposals ({ className = '', defaultProposal, defaultThreshold, filter,
 
   return (
     <div className={className}>
-      <Button.Group>
+      {/* <Button.Group>
         <Propose
           defaultThreshold={defaultThreshold}
           defaultValue={defaultProposal}
@@ -42,7 +42,7 @@ function Proposals ({ className = '', defaultProposal, defaultThreshold, filter,
           members={members}
           type={type}
         />
-      </Button.Group>
+      </Button.Group> */}
       <Table
         empty={proposalHashes && t<string>('No committee proposals')}
         header={headerRef.current}

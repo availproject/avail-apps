@@ -11,7 +11,7 @@ import { FormatBalance } from '@polkadot/react-query';
 import { isFunction } from '@polkadot/util';
 
 import { useTranslation } from '../translate';
-import Council from './Council';
+// import Council from './Council';
 
 interface Props {
   className?: string;
@@ -54,15 +54,15 @@ function ProposalDisplay ({ className = '', isMember, members, proposal: { counc
         </td>
         <td className={hasProposals ? 'middle' : 'button'}>
           {hasCouncil
-            ? hasProposals
-              ? <a href='#/council/motions'>{t('Voting')}</a>
-              : withSend && (
-                <Council
-                  id={id}
-                  isDisabled={!isMember}
-                  members={members}
-                />
-              )
+            ? hasProposals &&
+              <a href='#/council/motions'>{t('Voting')}</a>
+              // : withSend && (
+              //   <Council
+              //     id={id}
+              //     isDisabled={!isMember}
+              //     members={members}
+              //   />
+              // )
             : null
           }
         </td>

@@ -116,10 +116,10 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
       name: 'actions',
       text: t<string>('Accounts')
     },
-    hasStashes && isFunction(api.query.staking.activeEra) && {
-      name: 'payout',
-      text: t<string>('Payouts')
-    },
+    // hasStashes && isFunction(api.query.staking.activeEra) && {
+    //   name: 'payout',
+    //   text: t<string>('Payouts')
+    // },
     isFunction(api.query.nominationPools?.minCreateBond) && {
       name: 'pools',
       text: t<string>('Pools')
@@ -161,14 +161,14 @@ function StakingApp ({ basePath, className = '' }: Props): React.ReactElement<Pr
         <Route path={pathRef.current.bags}>
           <Bags ownStashes={ownStashes} />
         </Route>
-        <Route path={pathRef.current.payout}>
+        {/* <Route path={pathRef.current.payout}>
           <Payouts
             historyDepth={targets.historyDepth}
             isInElection={isInElection}
             ownPools={ownPools}
             ownValidators={ownValidators}
           />
-        </Route>
+        </Route> */}
         <Route path={pathRef.current.pools}>
           <Pools ownPools={ownPools} />
         </Route>

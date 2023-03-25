@@ -64,7 +64,8 @@
     "test:skipped": "echo 'tests skipped'"
   },
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

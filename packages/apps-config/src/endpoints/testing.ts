@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { EndpointOption } from './types';
+
 import config from '../variables/config';
 
 export * from './testingRelayRococo';
@@ -18,13 +19,13 @@ export * from './testingRelayWestend';
 // IMPORTANT: Alphabetical based on text
 export const testChains: EndpointOption[] = [
   {
-      info: 'matic',
-      text: 'Avail-Devnet 06',
-      providers: {
-        'POLYGON': 'wss://devnet06.dataavailability.link:28546'
-      }
+    info: 'data-avail',
+    text: 'Avail-TESTNET',
+    providers: {
+      AVAIL: config.TESTNETURL
+    }
   }
-    /* {
+  /* {
     info: '3dpass-testnet',
     text: '3DPass Testnet',
     providers: {

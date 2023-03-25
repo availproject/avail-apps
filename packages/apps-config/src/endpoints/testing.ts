@@ -20,7 +20,7 @@ export * from './testingRelayWestend';
 export const testChains: EndpointOption[] = [
   {
     info: 'data-avail',
-    text: 'Avail-TESTNET',
+    text: 'Avail-Testnet',
     providers: {
       AVAIL: config.TESTNETURL
     }

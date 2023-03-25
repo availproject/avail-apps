@@ -1,6 +1,6 @@
 <div align="Center">
 <h1>avail-apps</h1>
-<h3>Block Explorer & Apps for the Polygon Avail blockchain</h3>
+<h3>Block Explorer & Apps for the Avail blockchain</h3>
 </div>
 
 <br>
@@ -9,9 +9,9 @@
 
 `avail-apps` is a modified version of the [@polkadot/apps](https://github.com/polkadot-js/apps) repository for visualizing and interacting with the Avail network.
 
-Learn more about Avail at the Avail [product page](https://polygon.technology/solutions/polygon-avail/) and [documentation](https://wiki.polygon.technology/docs/avail/introduction/what-is-avail/) websites.
+Learn more about Avail at the Avail [product page](https://www.availproject.org) and [documentation](https://availproject.github.io/) websites.
 
-You can access a live version of the explorer for the Avail Testnet at https://testnet.polygonavail.net/
+You can access a live version of the explorer for the Avail Testnet at https://testnet.avail.tools/
 
 ## overview
 
@@ -45,7 +45,7 @@ To start off, this repo uses yarn workspaces to organize the code. As such, afte
 
 To get started -
 
-1. Clone the repo locally, via `git clone https://github.com/maticnetwork/avail-apps.git <optional local path>`
+1. Clone the repo locally, via `git clone https://github.com/availproject/avail-apps.git <optional local path>`
 2. Ensure that you have a recent LTS version of Node.js, for development purposes [Node >= 16](https://nodejs.org/en/) is recommended.
 3. Ensure that you have a recent version of Yarn, for development purposes [Yarn >= 1.22](https://yarnpkg.com/docs/install) is required.
 4. Install the dependencies by running `yarn`

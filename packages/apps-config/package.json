@@ -1,12 +1,12 @@
 {
-  "bugs": "https://github.com/maticnetwork/avail-apps/issues",
-  "homepage": "https://github.com/maticnetwork/avail-apps/tree/master/packages/apps-config#readme",
+  "bugs": "https://github.com/availproject/avail-apps/issues",
+  "homepage": "https://github.com/availproject/avail-apps/tree/master/packages/apps-config#readme",
   "license": "Apache-2.0",
   "name": "@polkadot/apps-config",
   "repository": {
     "directory": "packages/apps-config",
     "type": "git",
-    "url": "https://github.com/maticnetwork/avail-apps.git"
+    "url": "https://github.com/availproject/avail-apps.git"
   },
   "sideEffects": false,
   "type": "module",

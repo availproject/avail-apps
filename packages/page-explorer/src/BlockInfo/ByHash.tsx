@@ -96,7 +96,7 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
         mountedRef.current && setState(transformResult(result));
 
         const number = result[2]?.number.unwrap().toNumber();
-        // let LightClientURI = 'https://testnet.polygonavail.net/light/v1';
+        // let LightClientURI = 'https://testnet.avail.tools/light/v1';
         let LightClientURI = config.LCURL + '/v1';
 
         const url = new URL(window.location.href);

@@ -134,7 +134,7 @@ function extractLcUrlState (lcUrl: string | null, groups: Group[]): LcUrlState {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     const lcU = config.LCURL + '/json-rpc';
 
-    // lcUrl = 'https://testnet.polygonavail.net/light/json-rpc';
+    // lcUrl = 'https://testnet.avail.tools/light/json-rpc';
     lcUrl = lcU;
   }
 

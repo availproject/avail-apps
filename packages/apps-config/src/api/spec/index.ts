@@ -74,7 +74,7 @@ import logionParachain from './logion-parachain';
 import mangata from './mangata';
 import manta from './manta';
 import mathchain from './mathchain';
-import matic from './matic';
+import avail from './avail';
 import moonbeam from './moonbeam';
 import mybank from './mybank';
 import neatcoin from './neatcoin';
@@ -234,7 +234,7 @@ const spec: Record<string, OverrideBundleDefinition> = {
   nftmart,
   'node-moonbeam': moonbeam,
   'node-polkadex': polkadex,
-  'node-template': matic,
+  'node-template': avail,
   'nodle-chain': nodle,
   oak,
   opal,

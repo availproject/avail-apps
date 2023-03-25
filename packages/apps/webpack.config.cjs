@@ -22,7 +22,7 @@ module.exports = merge(
     plugins: [
       new SubresourceIntegrityPlugin(),
       new HtmlWebpackPlugin({
-        PAGE_TITLE: 'Polygon Avail Block Explorer',
+        PAGE_TITLE: 'Avail Block Explorer',
         inject: true,
         template: path.join(context, `${hasPublic ? 'public/' : ''}index.html`)
       })

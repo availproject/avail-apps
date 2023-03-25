@@ -18,7 +18,7 @@ module.exports = merge(
     },
     plugins: [
       new HtmlWebpackPlugin({
-        PAGE_TITLE: 'Polygon Avail Block Explorer',
+        PAGE_TITLE: 'Avail Block Explorer',
         inject: true,
         template: path.join(__dirname, 'public/index.html')
       })

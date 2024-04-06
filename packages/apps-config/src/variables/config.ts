@@ -19,7 +19,7 @@ const config: { [network: string]: { url: `wss://${string}`, lcUrl: string } } =
 export const getLCFromUrl = (apiUrl: string) => {
   if (apiUrl.includes('turing')) {
     return config.turing.lcUrl;
-  } else if (apiUrl.includes('goldberg') || apiUrl === "wss://rpc-testnet.avail.tools/ws") {
+  } else if (apiUrl.includes('goldberg') || apiUrl === 'wss://rpc-testnet.avail.tools/ws') {
     return config.goldberg.lcUrl;
   } else {
     return config.turing.lcUrl; // TODO-mainnet

@@ -22,7 +22,7 @@ RUN yarn && NODE_ENV=production yarn build:www
 # ===========================================================
 FROM nginx:stable-alpine
 
-# The following is mainly for doc purpose to show which ENV is supported
+# The following is mainly for doc purposes to show which ENV is supported
 ENV WS_URL=
 
 WORKDIR /usr/share/nginx/html

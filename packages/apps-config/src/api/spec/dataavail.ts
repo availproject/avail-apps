@@ -95,7 +95,8 @@ const definitions: OverrideBundleDefinition = {
         },
         DataLookup: {
           size: 'Compact<u32>',
-          index: 'Vec<DataLookupIndexItem>'
+          index: 'Vec<DataLookupIndexItem>',
+          rowsPerTx: 'Vec<u16>'
         },
         KateCommitment: {
           rows: 'Compact<u16>',

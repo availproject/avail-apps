@@ -16353,7 +16353,8 @@ export const typesBundle = {
             },
             "CompactDataLookup": {
               "size": "Compact<u32>",
-              "index": "Vec<DataLookupItem>"
+              "index": "Vec<DataLookupItem>",
+              "rowsPerTx": "Vec<u16>"
             },
             "KateCommitment": {
               "rows": "Compact<u16>",
@@ -22754,7 +22755,8 @@ export const typesBundle = {
             },
             "DataLookup": {
               "size": "Compact<u32>",
-              "index": "Vec<DataLookupIndexItem>"
+              "index": "Vec<DataLookupIndexItem>",
+              "rowsPerTx": "Vec<u16>"
             },
             "KateCommitment": {
               "rows": "Compact<u16>",

@@ -8,6 +8,22 @@ import type { OverrideBundleDefinition } from '@polkadot/types/types';
 
 const definitions: OverrideBundleDefinition = {
   rpc: {
+    blob: {
+      submitBlob: {
+        description: 'Submit a blob with its metadata extrinsic.',
+        params: [
+          {
+            name: 'metadata_signed_transaction',
+            type: 'Bytes'
+          },
+          {
+            name: 'blob',
+            type: 'Bytes'
+          }
+        ],
+        type: 'Null'
+      }
+    },
     kate: {
       blockLength: {
         description: 'Get Block Length',

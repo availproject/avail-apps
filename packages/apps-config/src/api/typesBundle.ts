@@ -16280,6 +16280,22 @@ export const typesBundle = {
     },
     "avail": {
       "rpc": {
+        "blob": {
+          "submitBlob": {
+            "description": "Submit a blob with its metadata extrinsic.",
+            "params": [
+              {
+                "name": "metadata_signed_transaction",
+                "type": "Bytes"
+              },
+              {
+                "name": "blob",
+                "type": "Bytes"
+              }
+            ],
+            "type": "Null"
+          }
+        },
         "kate": {
           "blockLength": {
             "description": "Get Block Length",
@@ -16455,6 +16471,12 @@ export const typesBundle = {
         "CheckAppId": {
           "extrinsic": {
             "appId": "AppId"
+          },
+          "payload": {}
+        },
+        "CheckBlob": {
+          "extrinsic": {
+            "blob": "Option<Vec<u8>>"
           },
           "payload": {}
         }
@@ -22804,6 +22826,14 @@ export const typesBundle = {
               "extra": "CheckAppIdExtra",
               "types": "CheckAppIdTypes"
             },
+            "CheckBlobExtra": {
+              "blob": "Option<Vec<u8>>"
+            },
+            "CheckBlobTypes": {},
+            "CheckBlob": {
+              "extra": "CheckBlobExtra",
+              "types": "CheckBlobTypes"
+            },
             "BlockLengthColumns": "Compact<u32>",
             "BlockLengthRows": "Compact<u32>",
             "BlockLength": {
@@ -22863,6 +22893,12 @@ export const typesBundle = {
         "CheckAppId": {
           "extrinsic": {
             "appId": "AppId"
+          },
+          "payload": {}
+        },
+        "CheckBlob": {
+          "extrinsic": {
+            "blob": "Option<Vec<u8>>"
           },
           "payload": {}
         }

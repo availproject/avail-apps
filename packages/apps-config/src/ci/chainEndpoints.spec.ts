@@ -19,7 +19,7 @@ interface DnsResponse {
   Question: { name: string }[];
 }
 
-const TIMEOUT = 60_000;
+const TIMEOUT = 300_000;
 
 function noopHandler () {
   // ignore

@@ -16353,6 +16353,10 @@ export const typesBundle = {
             },
             "CompactDataLookup": {
               "size": "Compact<u32>",
+              "index": "Vec<DataLookupItem>"
+            },
+            "CompactDataLookupV4": {
+              "size": "Compact<u32>",
               "index": "Vec<DataLookupItem>",
               "rowsPerTx": "Vec<u16>"
             },
@@ -16366,11 +16370,16 @@ export const typesBundle = {
               "appLookup": "CompactDataLookup",
               "commitment": "KateCommitment"
             },
+            "V4HeaderExtension": {
+              "appLookup": "CompactDataLookupV4",
+              "commitment": "KateCommitment"
+            },
             "HeaderExtension": {
               "_enum": {
                 "V1": "V3HeaderExtension",
                 "V2": "V3HeaderExtension",
-                "V3": "V3HeaderExtension"
+                "V3": "V3HeaderExtension",
+                "V4": "V4HeaderExtension"
               }
             },
             "DaHeader": {
@@ -22755,6 +22764,10 @@ export const typesBundle = {
             },
             "DataLookup": {
               "size": "Compact<u32>",
+              "index": "Vec<DataLookupIndexItem>"
+            },
+            "DataLookupV4": {
+              "size": "Compact<u32>",
               "index": "Vec<DataLookupIndexItem>",
               "rowsPerTx": "Vec<u16>"
             },
@@ -22776,6 +22789,10 @@ export const typesBundle = {
               "appLookup": "DataLookup",
               "commitment": "KateCommitment"
             },
+            "V4HeaderExtension": {
+              "appLookup": "DataLookupV4",
+              "commitment": "KateCommitment"
+            },
             "VTHeaderExtension": {
               "newField": "Vec<u8>",
               "commitment": "KateCommitment",
@@ -22786,6 +22803,7 @@ export const typesBundle = {
                 "V1": "V1HeaderExtension",
                 "V2": "V2HeaderExtension",
                 "V3": "V3HeaderExtension",
+                "V4": "V4HeaderExtension",
                 "VTest": "VTHeaderExtension"
               }
             },

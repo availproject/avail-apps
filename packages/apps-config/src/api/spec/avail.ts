@@ -80,6 +80,10 @@ const definitions: OverrideBundleDefinition = {
         CompactDataLookup: {
           size: 'Compact<u32>',
           index: 'Vec<DataLookupItem>',
+        },
+        CompactDataLookupV4: {
+          size: 'Compact<u32>',
+          index: 'Vec<DataLookupItem>',
           rowsPerTx: 'Vec<u16>'
         },
         KateCommitment: {
@@ -92,11 +96,16 @@ const definitions: OverrideBundleDefinition = {
           appLookup: 'CompactDataLookup',
           commitment: 'KateCommitment'
         },
+        V4HeaderExtension: {
+          appLookup: 'CompactDataLookupV4',
+          commitment: 'KateCommitment'
+        },
         HeaderExtension: {
           _enum: {
             V1: 'V3HeaderExtension',
             V2: 'V3HeaderExtension',
-            V3: 'V3HeaderExtension'
+            V3: 'V3HeaderExtension',
+            V4: 'V4HeaderExtension',
           }
         },
         DaHeader: {

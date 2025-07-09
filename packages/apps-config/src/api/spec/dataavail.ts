@@ -95,6 +95,10 @@ const definitions: OverrideBundleDefinition = {
         },
         DataLookup: {
           size: 'Compact<u32>',
+          index: 'Vec<DataLookupIndexItem>'
+        },
+         DataLookupV4: {
+          size: 'Compact<u32>',
           index: 'Vec<DataLookupIndexItem>',
           rowsPerTx: 'Vec<u16>'
         },
@@ -116,6 +120,10 @@ const definitions: OverrideBundleDefinition = {
           appLookup: 'DataLookup',
           commitment: 'KateCommitment'
         },
+         V4HeaderExtension: {
+          appLookup: 'DataLookupV4',
+          commitment: 'KateCommitment'
+        },
         VTHeaderExtension: {
           newField: 'Vec<u8>',
           commitment: 'KateCommitment',
@@ -126,6 +134,7 @@ const definitions: OverrideBundleDefinition = {
             V1: 'V1HeaderExtension',
             V2: 'V2HeaderExtension',
             V3: 'V3HeaderExtension',
+            V4: 'V4HeaderExtension',
             VTest: 'VTHeaderExtension'
           }
         },

@@ -360,13 +360,13 @@ function TxSigned ({ className, currentItem, isQueueSubmit, queueSize, requestAd
       if (senderInfo.signAddress) {
         const [tx, [, pairOrAddress, options, isMockSign]] = await Promise.all([
           wrapTx(api, currentItem, senderInfo),
-          extractParams(api, senderInfo.signAddress, { ...signedOptions, tip, withSignedTransaction: true } as Partial<SignerOptions>, getLedger, setQrState)
+          extractParams(api, senderInfo.signAddress, { ...signedOptions, appId, tip, withSignedTransaction: true } as Partial<SignerOptions>, getLedger, setQrState)
         ]);
 
         setSignedTx(await signAsync(queueSetTxStatus, currentItem, tx, pairOrAddress, options, api, isMockSign));
       }
     },
-    [api, getLedger, signedOptions, tip]
+    [api, appId, getLedger, signedOptions, tip]
   );
 
   const _doStart = useCallback(

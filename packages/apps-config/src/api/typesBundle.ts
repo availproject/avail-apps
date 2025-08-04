@@ -16296,7 +16296,7 @@ export const typesBundle = {
             "type": "Null"
           },
           "getBlob": {
-            "description": "Get all or some shards of a blob given the block hash where it got submitted, the blob hash, the blob index (position of the blob over the number of blob submission) and optionally some shard_ids.",
+            "description": "Get a blob given the block hash where it got submitted, the blob hash, the blob index (position of the blob over the number of blob submission).",
             "params": [
               {
                 "name": "block_hash",
@@ -16309,13 +16309,9 @@ export const typesBundle = {
               {
                 "name": "blob_hash",
                 "type": "H256"
-              },
-              {
-                "name": "shard_ids",
-                "type": "Option<Vec<u16>>"
               }
             ],
-            "type": "(Vec<Shard>, u16)"
+            "type": "Blob"
           }
         },
         "kate": {
@@ -16437,9 +16433,8 @@ export const typesBundle = {
               "extra": "CheckAppIdExtra",
               "types": "CheckAppIdTypes"
             },
-            "Shard": {
+            "Blob": {
               "blob_hash": "H256",
-              "shard_id": "u16",
               "data": "Vec<u8>",
               "size": "u64"
             },

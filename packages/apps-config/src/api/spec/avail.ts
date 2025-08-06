@@ -40,6 +40,11 @@ const definitions: OverrideBundleDefinition = {
           }
         ],
         type: 'Blob'
+      },
+      logStuff: {
+        description: 'Log stuff',
+        params: [],
+        type: 'Null'
       }
     },
     kate: {

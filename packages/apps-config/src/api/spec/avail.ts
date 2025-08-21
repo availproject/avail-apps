@@ -42,7 +42,12 @@ const definitions: OverrideBundleDefinition = {
         type: 'Blob'
       },
       logStuff: {
-        description: 'Log stuff',
+        description: 'Log stuff (for tests)',
+        params: [],
+        type: 'Null'
+      },
+      clearBlobStorage: {
+        description: 'Clear all blob storage (for tests)',
         params: [],
         type: 'Null'
       }

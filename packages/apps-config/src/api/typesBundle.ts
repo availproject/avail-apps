@@ -16318,11 +16318,6 @@ export const typesBundle = {
             "params": [],
             "type": "Null"
           },
-          "clearBlobStorage": {
-            "description": "Clear all blob storage (for tests)",
-            "params": [],
-            "type": "Null"
-          }
         },
         "kate": {
           "blockLength": {

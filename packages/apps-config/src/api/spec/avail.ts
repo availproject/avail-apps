@@ -14,11 +14,11 @@ const definitions: OverrideBundleDefinition = {
         params: [
           {
             name: 'metadata_signed_transaction',
-            type: 'Bytes'
+            type: 'B64Param'
           },
           {
             name: 'blob',
-            type: 'Bytes'
+            type: 'B64Param'
           }
         ],
         type: 'Null'
@@ -45,7 +45,7 @@ const definitions: OverrideBundleDefinition = {
         description: 'Log stuff (for tests)',
         params: [],
         type: 'Null'
-      },
+      }
     },
     kate: {
       blockLength: {
@@ -164,6 +164,7 @@ const definitions: OverrideBundleDefinition = {
           extra: 'CheckAppIdExtra',
           types: 'CheckAppIdTypes'
         },
+        B64Param: 'String',
         Blob: {
           blob_hash: 'H256',
           data: 'Vec<u8>',

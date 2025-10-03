@@ -16286,11 +16286,11 @@ export const typesBundle = {
             "params": [
               {
                 "name": "metadata_signed_transaction",
-                "type": "Bytes"
+                "type": "B64Param"
               },
               {
                 "name": "blob",
-                "type": "Bytes"
+                "type": "B64Param"
               }
             ],
             "type": "Null"
@@ -16317,7 +16317,7 @@ export const typesBundle = {
             "description": "Log stuff (for tests)",
             "params": [],
             "type": "Null"
-          },
+          }
         },
         "kate": {
           "blockLength": {
@@ -16438,6 +16438,7 @@ export const typesBundle = {
               "extra": "CheckAppIdExtra",
               "types": "CheckAppIdTypes"
             },
+            "B64Param": "String",
             "Blob": {
               "blob_hash": "H256",
               "data": "Vec<u8>",

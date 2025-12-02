@@ -16353,6 +16353,10 @@ export const typesBundle = {
             },
             "CompactDataLookup": {
               "size": "Compact<u32>",
+              "index": "Vec<DataLookupItem>"
+            },
+            "CompactDataLookupV4": {
+              "size": "Compact<u32>",
               "index": "Vec<DataLookupItem>",
               "rowsPerTx": "Vec<u16>"
             },
@@ -16366,11 +16370,34 @@ export const typesBundle = {
               "appLookup": "CompactDataLookup",
               "commitment": "KateCommitment"
             },
+            "V4HeaderExtension": {
+              "appLookup": "CompactDataLookupV4",
+              "commitment": "KateCommitment"
+            },
+            "KzgHeader": {
+              "_enum": {
+                "V4": "V4HeaderExtension"
+              }
+            },
+            "FriParamsVersion": "u8",
+            "FriBlobCommitment": {
+              "sizeBytes": "u64",
+              "commitment": "Vec<u8>"
+            },
+            "FriV1HeaderExtension": {
+              "blobs": "Vec<FriBlobCommitment>",
+              "dataRoot": "H256",
+              "paramsVersion": "FriParamsVersion"
+            },
+            "FriHeader": {
+              "_enum": {
+                "V1": "FriV1HeaderExtension"
+              }
+            },
             "HeaderExtension": {
               "_enum": {
-                "V1": "V3HeaderExtension",
-                "V2": "V3HeaderExtension",
-                "V3": "V3HeaderExtension"
+                "Kzg": "KzgHeader",
+                "Fri": "FriHeader"
               }
             },
             "DaHeader": {
@@ -22749,13 +22776,17 @@ export const typesBundle = {
           ],
           "types": {
             "AppId": "Compact<u32>",
-            "DataLookupIndexItem": {
+            "DataLookupItem": {
               "appId": "AppId",
               "start": "Compact<u32>"
             },
-            "DataLookup": {
+            "CompactDataLookup": {
               "size": "Compact<u32>",
-              "index": "Vec<DataLookupIndexItem>",
+              "index": "Vec<DataLookupItem>"
+            },
+            "CompactDataLookupV4": {
+              "size": "Compact<u32>",
+              "index": "Vec<DataLookupItem>",
               "rowsPerTx": "Vec<u16>"
             },
             "KateCommitment": {
@@ -22764,29 +22795,38 @@ export const typesBundle = {
               "commitment": "Vec<u8>",
               "dataRoot": "H256"
             },
-            "V1HeaderExtension": {
-              "appLookup": "DataLookup",
-              "commitment": "KateCommitment"
-            },
-            "V2HeaderExtension": {
-              "appLookup": "DataLookup",
-              "commitment": "KateCommitment"
-            },
             "V3HeaderExtension": {
-              "appLookup": "DataLookup",
+              "appLookup": "CompactDataLookup",
               "commitment": "KateCommitment"
             },
-            "VTHeaderExtension": {
-              "newField": "Vec<u8>",
-              "commitment": "KateCommitment",
-              "appLookup": "DataLookup"
+            "V4HeaderExtension": {
+              "appLookup": "CompactDataLookupV4",
+              "commitment": "KateCommitment"
+            },
+            "KzgHeader": {
+              "_enum": {
+                "V4": "V4HeaderExtension"
+              }
+            },
+            "FriParamsVersion": "u8",
+            "FriBlobCommitment": {
+              "sizeBytes": "u64",
+              "commitment": "Vec<u8>"
+            },
+            "FriV1HeaderExtension": {
+              "blobs": "Vec<FriBlobCommitment>",
+              "dataRoot": "H256",
+              "paramsVersion": "FriParamsVersion"
+            },
+            "FriHeader": {
+              "_enum": {
+                "V1": "FriV1HeaderExtension"
+              }
             },
             "HeaderExtension": {
               "_enum": {
-                "V1": "V1HeaderExtension",
-                "V2": "V2HeaderExtension",
-                "V3": "V3HeaderExtension",
-                "VTest": "VTHeaderExtension"
+                "Kzg": "KzgHeader",
+                "Fri": "FriHeader"
               }
             },
             "DaHeader": {
@@ -22820,33 +22860,34 @@ export const typesBundle = {
               "mandatory": "u32"
             },
             "DataProof": {
-              "root": "H256",
+              "roots": "TxDataRoots",
               "proof": "Vec<H256>",
               "numberOfLeaves": "Compact<u32>",
               "leafIndex": "Compact<u32>",
               "leaf": "H256"
             },
-            "DataProofV2": {
+            "TxDataRoots": {
               "dataRoot": "H256",
               "blobRoot": "H256",
-              "bridgeRoot": "H256",
-              "proof": "Vec<H256>",
-              "numberOfLeaves": "Compact<u32>",
-              "leafIndex": "Compact<u32>",
-              "leaf": "H256"
+              "bridgeRoot": "H256"
             },
             "ProofResponse": {
-              "dataProof": "DataProofV2",
-              "message": "Option<Message>"
+              "dataProof": "DataProof",
+              "message": "Option<AddressedMessage>"
             },
-            "Message": {
-              "messageType": "MessageType",
+            "AddressedMessage": {
+              "message": "Message",
               "from": "H256",
               "to": "H256",
               "originDomain": "u32",
               "destinationDomain": "u32",
-              "data": "Vec<u8>",
               "id": "u64"
+            },
+            "Message": {
+              "_enum": {
+                "ArbitraryMessage": "ArbitraryMessage",
+                "FungibleToken": "FungibleToken"
+              }
             },
             "MessageType": {
               "_enum": [
@@ -22854,6 +22895,12 @@ export const typesBundle = {
                 "FungibleToken"
               ]
             },
+            "FungibleToken": {
+              "assetId": "H256",
+              "amount": "String"
+            },
+            "BoundedData": "Vec<u8>",
+            "ArbitraryMessage": "BoundedData",
             "Cell": {
               "row": "BlockLengthRows",
               "col": "BlockLengthColumns"

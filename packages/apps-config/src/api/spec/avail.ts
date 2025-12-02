@@ -79,6 +79,10 @@ const definitions: OverrideBundleDefinition = {
         },
         CompactDataLookup: {
           size: 'Compact<u32>',
+          index: 'Vec<DataLookupItem>'
+        },
+        CompactDataLookupV4: {
+          size: 'Compact<u32>',
           index: 'Vec<DataLookupItem>',
           rowsPerTx: 'Vec<u16>'
         },
@@ -92,11 +96,34 @@ const definitions: OverrideBundleDefinition = {
           appLookup: 'CompactDataLookup',
           commitment: 'KateCommitment'
         },
+        V4HeaderExtension: {
+          appLookup: 'CompactDataLookupV4',
+          commitment: 'KateCommitment'
+        },
+        KzgHeader: {
+          _enum: {
+            V4: 'V4HeaderExtension'
+          }
+        },
+        FriParamsVersion: 'u8',
+        FriBlobCommitment: {
+          sizeBytes: 'u64',
+          commitment: 'Vec<u8>'
+        },
+        FriV1HeaderExtension: {
+          blobs: 'Vec<FriBlobCommitment>',
+          dataRoot: 'H256',
+          paramsVersion: 'FriParamsVersion'
+        },
+        FriHeader: {
+          _enum: {
+            V1: 'FriV1HeaderExtension'
+          }
+        },
         HeaderExtension: {
           _enum: {
-            V1: 'V3HeaderExtension',
-            V2: 'V3HeaderExtension',
-            V3: 'V3HeaderExtension'
+            Kzg: 'KzgHeader',
+            Fri: 'FriHeader'
           }
         },
         DaHeader: {

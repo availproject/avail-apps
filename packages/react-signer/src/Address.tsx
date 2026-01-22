@@ -142,13 +142,15 @@ function filterProxies (allAccounts: string[], tx: Call | SubmittableExtrinsic<'
     .map(([address]) => address);
 }
 
-async function queryForMultisig (api: ApiPromise, requestAddress: string | null, proxyAddress: string | null, tx: SubmittableExtrinsic<'promise'>): Promise<MultiState | null> {
+// This function shouldn't depend on proxyAddress, it can fetch multisig info based on source multisig account.
+async function queryForMultisig (api: ApiPromise, requestAddress: string | null, isProxyActive: boolean, proxyAddress: string | null, tx: SubmittableExtrinsic<'promise'>): Promise<MultiState | null> {
   const multiModule = api.tx.multisig ? 'multisig' : 'utility';
 
   if (isFunction(api.query[multiModule]?.multisigs)) {
-    const address = proxyAddress || requestAddress;
+    const address = (proxyAddress && isProxyActive) ? proxyAddress : requestAddress;
     const { threshold, who } = extractExternal(address);
-    const hash = (proxyAddress ? api.tx.proxy.proxy(requestAddress || '', null, tx) : tx).method.hash;
+    const hash = (proxyAddress && isProxyActive ? api.tx.proxy.proxy(requestAddress || '', null, tx) : tx).method.hash;
+
     const optMulti = await api.query[multiModule].multisigs<Option<Multisig>>(address, hash);
     const multi = optMulti.unwrapOr(null);
 
@@ -202,6 +204,9 @@ function Address ({ currentItem, onChange, onEnter, passwordError, requestAddres
 
   const [signAddress, flags] = useMemo(
     (): [string | null, AddressFlags] => {
+      // If certain conditions are met, then proxyAddress would have higher priority over multisig signatories.
+      // proxyAddress would be used to sign tx in that scenario.
+      // Avail: Above seems wrong, I let it for further upstream updates, but I switched the order back
       const signAddress = (multiInfo && multiAddress) ||
         (isProxyActive && proxyInfo && proxyAddress) ||
         requestAddress;
@@ -238,8 +243,8 @@ function Address ({ currentItem, onChange, onEnter, passwordError, requestAddres
   useEffect((): void => {
     setMultInfo(null);
 
-    currentItem.extrinsic && extractExternal(proxyAddress || requestAddress).isMultisig &&
-      queryForMultisig(api, requestAddress, proxyAddress, currentItem.extrinsic)
+    currentItem.extrinsic && extractExternal(proxyAddress && isProxyActive ? proxyAddress : requestAddress).isMultisig &&
+      queryForMultisig(api, requestAddress, isProxyActive, proxyAddress, currentItem.extrinsic)
         .then((info): void => {
           if (mountedRef.current) {
             setMultInfo(info);
@@ -247,7 +252,7 @@ function Address ({ currentItem, onChange, onEnter, passwordError, requestAddres
           }
         })
         .catch(console.error);
-  }, [proxyAddress, api, currentItem, mountedRef, requestAddress]);
+  }, [api, currentItem.extrinsic, isProxyActive, mountedRef, proxyAddress, requestAddress]);
 
   useEffect((): void => {
     onChange({

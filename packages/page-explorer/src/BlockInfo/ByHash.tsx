@@ -18,7 +18,7 @@ import { getExplorerLink } from '@polkadot/react-components/util';
 import { useApi, useIsMountedRef } from '@polkadot/react-hooks';
 import { convertWeight } from '@polkadot/react-hooks/useWeight';
 import { settings } from '@polkadot/ui-settings';
-import { formatNumber } from '@polkadot/util';
+import { formatNumber, isBn } from '@polkadot/util';
 
 import { getLCFromUrl } from '../../../apps-config/src/variables/config.js';
 import Events from '../Events.js';
@@ -178,7 +178,7 @@ function BlockByHash ({ className = '', error, value }: Props): React.ReactEleme
       <Summary
         events={events}
         maxBlockWeight={(maxBlockWeight as V2Weight).refTime.toBn()}
-        maxProofSize={(maxBlockWeight as V2Weight).proofSize.toBn()}
+        maxProofSize={isBn(maxBlockWeight.proofSize) ? maxBlockWeight.proofSize : (maxBlockWeight as V2Weight).proofSize.toBn()}
         signedBlock={getBlock}
       />
       <Table header={header}>

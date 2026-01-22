@@ -123,6 +123,7 @@ const definitions: OverrideBundleDefinition = {
         },
         FriParamsVersion: 'u8',
         FriBlobCommitment: {
+          blobHash: 'H256',
           sizeBytes: 'u64',
           commitment: 'Vec<u8>'
         },

@@ -16381,6 +16381,7 @@ export const typesBundle = {
             },
             "FriParamsVersion": "u8",
             "FriBlobCommitment": {
+              "blobHash": "H256",
               "sizeBytes": "u64",
               "commitment": "Vec<u8>"
             },

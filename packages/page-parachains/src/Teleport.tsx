@@ -2,17 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SubmittableExtrinsicFunction } from '@polkadot/api/types';
-import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import type { LinkOption } from '@polkadot/apps-config/endpoints/types';
 import type { Option } from '@polkadot/apps-config/settings/types';
 import type { BN } from '@polkadot/util';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
-import { ChainImg, Dropdown, InputAddress, InputBalance, MarkWarning, Modal, styled, TxButton } from '@polkadot/react-components';
-import { useApi, useApiUrl, useCall, useTeleport } from '@polkadot/react-hooks';
-import { Available, FormatBalance } from '@polkadot/react-query';
-import { BN_HUNDRED, BN_ZERO, isFunction, nextTick } from '@polkadot/util';
+import { ChainImg, Dropdown, InputAddress, InputBalance, MarkWarning, Modal, TxButton } from '@polkadot/react-components';
+import { useApi, useApiUrl, useTeleport } from '@polkadot/react-hooks';
+import { Available } from '@polkadot/react-query';
+import { BN_ZERO, isFunction } from '@polkadot/util';
 
 import { useTranslation } from './translate.js';
 
@@ -49,8 +48,6 @@ function Teleport ({ onClose }: Props): React.ReactElement<Props> | null {
   const [senderId, setSenderId] = useState<string | null>(null);
   const [recipientParaId, setParaId] = useState(INVALID_PARAID);
   const { allowTeleport, destinations, isParaTeleport, oneWay } = useTeleport();
-  const balances = useCall<DeriveBalancesAll>(api.derive.balances?.all, [senderId]);
-  const [maxTransfer, setMaxTransfer] = useState<BN | null>(null);
 
   const call = useMemo(
     (): SubmittableExtrinsicFunction<'promise'> => {
@@ -128,31 +125,7 @@ function Teleport ({ onClose }: Props): React.ReactElement<Props> | null {
     [api, amount, isParaTeleport, recipientId, recipientParaId]
   );
 
-  const hasAvailable = !!amount && (maxTransfer ? amount.lte(maxTransfer) : true);
-
-  useEffect(() => {
-    if (balances && balances.accountId.eq(senderId) && senderId && recipientId && api.call.transactionPaymentApi && api.tx.balances) {
-      nextTick(async (): Promise<void> => {
-        try {
-          const extrinsic = call(...params);
-          const { partialFee } = await extrinsic.paymentInfo(senderId);
-
-          const adjFee = partialFee.muln(110).div(BN_HUNDRED);
-          const maxTransfer = (balances.transferable || balances.availableBalance).sub(adjFee);
-
-          setMaxTransfer(
-            api.consts.balances && maxTransfer.gt(api.consts.balances.existentialDeposit)
-              ? maxTransfer.sub(api.consts.balances.existentialDeposit)
-              : null
-          );
-        } catch (error) {
-          console.error(error);
-        }
-      });
-    } else {
-      setMaxTransfer(null);
-    }
-  }, [api.call.transactionPaymentApi, api.consts.balances, api.tx.balances, balances, call, params, recipientId, senderId]);
+  const hasAvailable = !!amount;
 
   return (
     <Modal
@@ -209,11 +182,6 @@ function Teleport ({ onClose }: Props): React.ReactElement<Props> | null {
             label={t('amount')}
             onChange={setAmount}
           />
-          {maxTransfer &&
-          <StyledInfo>
-            <span>Max -</span>
-            <FormatBalance value={maxTransfer} />
-          </StyledInfo>}
           <InputBalance
             defaultValue={destApi?.consts.balances?.existentialDeposit}
             isDisabled
@@ -238,14 +206,3 @@ function Teleport ({ onClose }: Props): React.ReactElement<Props> | null {
 }
 
 export default React.memo(Teleport);
-
-const StyledInfo = styled.p`
-  align-items: center;
-  display: flex;
-  font-size: var(--font-size-small);
-  gap: 3px;
-  justify-content: flex-end;
-  span:first-of-type {
-    font-weight: var(--font-weight-bold);
-  }
-`;

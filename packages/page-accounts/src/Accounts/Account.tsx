@@ -15,7 +15,6 @@ import type { ProxyDefinition, RecoveryConfig } from '@polkadot/types/interfaces
 import type { KeyringAddress, KeyringJson$Meta } from '@polkadot/ui-keyring/types';
 import type { AccountBalance, Delegation } from '../types.js';
 
-import FileSaver from 'file-saver';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAccountLocks from '@polkadot/app-referenda/useAccountLocks';
@@ -50,7 +49,6 @@ interface Props {
   proxy?: [ProxyDefinition[], BN];
   setBalance: (address: string, value: AccountBalance) => void;
   toggleFavorite: (address: string) => void;
-  onStatusChange: (status: ActionStatus) => void;
 }
 
 interface DemocracyUnlockable {
@@ -159,7 +157,7 @@ const transformRecovery = {
   transform: (opt: Option<RecoveryConfig>) => opt.unwrapOr(null)
 };
 
-function Account ({ account: { address, meta }, className = '', delegation, filter, isFavorite, onStatusChange, proxy, setBalance, toggleFavorite }: Props): React.ReactElement<Props> | null {
+function Account ({ account: { address, meta }, className = '', delegation, filter, isFavorite, proxy, setBalance, toggleFavorite }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const [isExpanded, toggleIsExpanded] = useToggle(false);
   const { queueExtrinsic } = useQueue();
@@ -277,32 +275,6 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
     [address, t]
   );
 
-  const _onExportMultisig = useCallback(() => {
-    try {
-      if (!isMultisig) {
-        throw new Error('not a multisig account');
-      }
-
-      if (!meta.who) {
-        throw new Error('signatories not found');
-      }
-
-      const signatories: string[] = meta.who;
-      const blob = new Blob([JSON.stringify(signatories, null, 2)], { type: 'application/json; charset=utf-8' });
-
-      FileSaver.saveAs(blob, `${accName}_${address}_${new Date().getTime()}.json`);
-    } catch (error) {
-      const status: ActionStatus = {
-        account: address,
-        action: 'export',
-        message: (error as Error).message,
-        status: 'error'
-      };
-
-      onStatusChange(status);
-    }
-  }, [accName, address, isMultisig, meta.who, onStatusChange]);
-
   const _clearDemocracyLocks = useCallback(
     () => democracyUnlockTx && queueExtrinsic({
       accountId: address,
@@ -408,14 +380,6 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
           onClick={toggleBackup}
         />
       ),
-      !(isInjected || isDevelopment) && isMultisig && (
-        <Menu.Item
-          icon='database'
-          key='backupJson'
-          label={t('Export JSON file with signatories')}
-          onClick={_onExportMultisig}
-        />
-      ),
       !(isExternal || isHardware || isInjected || isMultisig || isDevelopment) && (
         <Menu.Item
           icon='edit'
@@ -502,7 +466,7 @@ function Account ({ account: { address, meta }, className = '', delegation, filt
       />
     ])
   ].filter((i) => i),
-  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, _onExportMultisig, api, apiIdentity.tx.identity, enableIdentity, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isDevelopmentApiProps, isEthereumApiProps, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, proxy, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleProxyOverview, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
+  [_clearDemocracyLocks, _clearReferendaLocks, _showOnHardware, _vestingVest, api, apiIdentity.tx.identity, enableIdentity, delegation, democracyUnlockTx, genesisHash, identity, isDevelopment, isDevelopmentApiProps, isEthereumApiProps, isEditable, isEthereum, isExternal, isHardware, isInjected, isMultisig, multiInfos, onSetGenesisHash, proxy, referendaUnlockTx, recoveryInfo, t, toggleBackup, toggleDelegate, toggleDerive, toggleForget, toggleIdentityMain, toggleIdentitySub, toggleMultisig, togglePassword, toggleProxyOverview, toggleRecoverAccount, toggleRecoverSetup, toggleUndelegate, vestingVestTx]);
 
   if (!isVisible) {
     return null;

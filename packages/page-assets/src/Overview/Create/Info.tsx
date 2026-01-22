@@ -1,7 +1,6 @@
 // Copyright 2017-2025 @polkadot/app-assets authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { BitLength } from '@polkadot/react-components/types';
 import type { BN } from '@polkadot/util';
 import type { InfoState } from './types.js';
 
@@ -20,8 +19,6 @@ interface Props {
   onChange: (info: InfoState | null) => void;
   openId: BN;
 }
-
-const ASSET_ID_BIT_LENGTH: BitLength = 128;
 
 function Info ({ assetIds, className = '', defaultValue, onChange, openId }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
@@ -117,7 +114,6 @@ function Info ({ assetIds, className = '', defaultValue, onChange, openId }: Pro
       </Modal.Columns>
       <Modal.Columns hint={t('The selected id for the asset. This should not match an already-existing asset id.')}>
         <InputNumber
-          bitLength={ASSET_ID_BIT_LENGTH}
           defaultValue={initial?.assetId || initialId}
           isError={!isValidId}
           isZeroable={false}

@@ -1,17 +1,17 @@
-// Copyright 2017-2025 @polkadot/react-hooks authors & contributors
+// Copyright 2017-2025 @polkadot/app-assets authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { Changes } from '@polkadot/react-hooks/useEventChanges';
 import type { StorageKey, u32 } from '@polkadot/types';
 import type { EventRecord } from '@polkadot/types/interfaces';
-import type { Changes } from './useEventChanges.js';
 
-import { createNamedHook, useApi, useEventChanges, useMapKeys } from './index.js';
+import { createNamedHook, useApi, useEventChanges, useMapKeys } from '@polkadot/react-hooks';
 
 const EMPTY_PARAMS: unknown[] = [];
 
 const OPT_KEY = {
   transform: (keys: StorageKey<[u32]>[]): u32[] =>
-    keys.map(({ args: [id] }) => id).filter((id) => id !== undefined)
+    keys.map(({ args: [id] }) => id)
 };
 
 function filter (records: EventRecord[]): Changes<u32> {
@@ -31,13 +31,13 @@ function filter (records: EventRecord[]): Changes<u32> {
 
 function useAssetIdsImpl (): u32[] | undefined {
   const { api } = useApi();
-  const startValue = useMapKeys(api.query.assets?.asset, EMPTY_PARAMS, OPT_KEY) || [];
+  const startValue = useMapKeys(api.query.assets.asset, EMPTY_PARAMS, OPT_KEY);
 
   return useEventChanges([
-    api.events.assets?.Created,
-    api.events.assets?.Destroyed,
-    api.events.assets?.ForceCreated
+    api.events.assets.Created,
+    api.events.assets.Destroyed,
+    api.events.assets.ForceCreated
   ], filter, startValue);
 }
 
-export const useAssetIds = createNamedHook('useAssetIds', useAssetIdsImpl);
+export default createNamedHook('useAssetIds', useAssetIdsImpl);

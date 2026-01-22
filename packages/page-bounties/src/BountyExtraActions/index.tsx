@@ -2,8 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveCollectiveProposal } from '@polkadot/api-derive/types';
-import type { BountyIndex } from '@polkadot/types/interfaces';
-import type { PalletBountiesBountyStatus } from '@polkadot/types/lookup';
+import type { BountyIndex, BountyStatus } from '@polkadot/types/interfaces';
 import type { BN } from '@polkadot/util';
 import type { ValidUnassignCuratorAction } from '../types.js';
 
@@ -27,7 +26,7 @@ interface Props {
   description: string;
   index: BountyIndex;
   proposals?: DeriveCollectiveProposal[];
-  status: PalletBountiesBountyStatus;
+  status: BountyStatus;
 }
 
 function Index ({ bestNumber, className, description, index, proposals, status }: Props): React.ReactElement<Props> | null {

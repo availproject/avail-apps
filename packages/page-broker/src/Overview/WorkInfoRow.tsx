@@ -6,9 +6,8 @@ import type { FlagColor } from '@polkadot/react-components/types';
 import React from 'react';
 
 import { AddressMini, styled, Tag } from '@polkadot/react-components';
-import { CoreTimeTypes } from '@polkadot/react-hooks/constants';
 
-import { type InfoRow } from '../types.js';
+import { CoreTimeTypes, type InfoRow } from '../types.js';
 
 const colours: Record<string, string> = {
   [CoreTimeTypes.Reservation]: 'orange',

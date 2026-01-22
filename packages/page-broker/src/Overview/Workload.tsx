@@ -11,7 +11,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { ExpandButton } from '@polkadot/react-components';
 import { useApi, useBrokerSalesInfo, useCall, useRegions, useToggle } from '@polkadot/react-hooks';
-import { useCoretimeConsts } from '@polkadot/react-hooks/useCoretimeConsts';
 
 import { formatRowInfo } from '../utils.js';
 import WorkInfoRow from './WorkInfoRow.js';
@@ -28,7 +27,6 @@ interface Props {
 function Workload ({ api, config, core, workload, workplan }: Props): React.ReactElement<Props> {
   const { isApiReady } = useApi();
   const salesInfo = useBrokerSalesInfo(api, isApiReady);
-  const coretimeConstants = useCoretimeConsts();
 
   const status = useCall<Option<PalletBrokerStatusRecord>>(isApiReady && api.query.broker?.status);
   const [isExpanded, toggleIsExpanded] = useToggle(false);
@@ -49,34 +47,18 @@ function Workload ({ api, config, core, workload, workplan }: Props): React.Reac
   useEffect(() => {
     if (!!workload?.length && !!salesInfo) {
       // saleInfo points to a regionEnd and regionBeing in the next cycle, but we want the start and end of the current cycle
-      setWorkloadData(formatRowInfo(
-        workload,
-        core,
-        region,
-        currentTimeSlice,
-        { regionBegin: salesInfo.regionBegin - config.regionLength, regionEnd: salesInfo.regionEnd - config.regionLength },
-        config.regionLength,
-        coretimeConstants?.relay
-      ));
+      setWorkloadData(formatRowInfo(workload, core, region, currentTimeSlice, { regionBegin: salesInfo.regionBegin - config.regionLength, regionEnd: salesInfo.regionEnd - config.regionLength }, config.regionLength));
     } else {
       return setWorkloadData([{ core }]);
     }
-  }, [workload, region, currentTimeSlice, core, salesInfo, config, coretimeConstants]);
+  }, [workload, region, currentTimeSlice, core, salesInfo, config]);
 
   useEffect(() => {
     if (!!workplan?.length && !!salesInfo) {
-      setWorkplanData(formatRowInfo(
-        workplan,
-        core,
-        region,
-        currentTimeSlice,
-        { regionBegin: salesInfo.regionBegin - config.regionLength, regionEnd: salesInfo.regionEnd - config.regionLength },
-        config.regionLength,
-        coretimeConstants?.relay
-      ));
+      setWorkplanData(formatRowInfo(workplan, core, region, currentTimeSlice, salesInfo, config.regionLength));
     }
   }
-  , [workplan, region, currentTimeSlice, core, salesInfo, config, coretimeConstants]);
+  , [workplan, region, currentTimeSlice, core, salesInfo, config]);
 
   const hasWorkplan = workplan?.length;
 

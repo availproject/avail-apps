@@ -11,7 +11,7 @@ import { CardSummary, SummaryBox } from '@polkadot/react-components';
 import { useApi } from '@polkadot/react-hooks';
 import { convertWeight } from '@polkadot/react-hooks/useWeight';
 import { FormatBalance } from '@polkadot/react-query';
-import { BN, BN_ONE, BN_THREE, BN_TWO, BN_ZERO, formatNumber, isBn } from '@polkadot/util';
+import { BN, BN_ONE, BN_THREE, BN_TWO, BN_ZERO, formatNumber } from '@polkadot/util';
 
 import { useTranslation } from '../translate.js';
 
@@ -25,10 +25,6 @@ interface Props {
 function extractEventDetails (events?: KeyedEvent[] | null): [BN?, BN?, BN?, BN?] {
   return events
     ? events.reduce(([deposits, transfers, weight], { record: { event: { data, method, section } } }) => {
-      const size = (convertWeight(
-        ((method === 'ExtrinsicSuccess' ? data[0] : data[1]) as DispatchInfo)?.weight
-      ).v2Weight as V2Weight).proofSize;
-
       return [
         section === 'balances' && method === 'Deposit'
           ? deposits.iadd(data[1] as Balance)
@@ -38,11 +34,13 @@ function extractEventDetails (events?: KeyedEvent[] | null): [BN?, BN?, BN?, BN?
           : transfers,
         section === 'system' && ['ExtrinsicFailed', 'ExtrinsicSuccess'].includes(method)
           ? weight.iadd(convertWeight(
-            ((method === 'ExtrinsicSuccess' ? data[0] : data[1]) as DispatchInfo)?.weight
+            ((method === 'ExtrinsicSuccess' ? data[0] : data[1]) as DispatchInfo).weight
           ).v1Weight)
           : weight,
         section === 'system' && ['ExtrinsicFailed', 'ExtrinsicSuccess'].includes(method)
-          ? (isBn(size) ? size : size.toBn())
+          ? (convertWeight(
+            ((method === 'ExtrinsicSuccess' ? data[0] : data[1]) as DispatchInfo).weight
+          ).v2Weight as V2Weight).proofSize.toBn()
           : BN_ZERO
       ];
     }, [new BN(0), new BN(0), new BN(0), new BN(0)])
@@ -83,7 +81,7 @@ function Summary ({ events, maxBlockWeight, maxProofSize, signedBlock }: Props):
       </section>
       <section>
         <CardSummary
-          label={t('ref time')}
+          label={t('block weight')}
           progress={{
             hideValue: true,
             isBlurred: !(maxBlockWeight && weight),

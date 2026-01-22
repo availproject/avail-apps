@@ -45,7 +45,6 @@ function DotApps ({ className }: Props): React.ReactElement<Props> | null {
         className={className}
         icon='link'
         isBottom
-        isDev
         isFull
         type='info'
       >

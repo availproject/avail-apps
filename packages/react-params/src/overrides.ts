@@ -20,7 +20,7 @@ export const balanceCalls = [
   'society.bid', 'society.vouch',
   'staking.bond', 'staking.bondExtra', 'staking.rebond', 'staking.unbond',
   'tips.tip', 'tips.tipNew',
-  'treasury.proposeSpend', 'treasury.spendLocal',
+  'treasury.proposeSpend', 'treasury.spend',
   'vesting.forceVestedTransfer', 'vesting.vestedTransfer'
 ];
 

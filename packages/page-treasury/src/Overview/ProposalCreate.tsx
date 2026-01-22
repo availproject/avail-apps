@@ -3,12 +3,13 @@
 
 import type { Option, u128 } from '@polkadot/types';
 import type { Permill } from '@polkadot/types/interfaces';
+import type { BN } from '@polkadot/util';
 
 import React, { useMemo, useState } from 'react';
 
 import { Button, InputAddress, InputBalance, MarkWarning, Modal, Static, TxButton } from '@polkadot/react-components';
 import { useApi, useToggle } from '@polkadot/react-hooks';
-import { BN, BN_HUNDRED, BN_MILLION } from '@polkadot/util';
+import { BN_HUNDRED, BN_MILLION } from '@polkadot/util';
 
 import { useTranslation } from '../translate.js';
 
@@ -27,15 +28,11 @@ function Propose ({ className }: Props): React.ReactElement<Props> | null {
 
   const [bondMin, bondMax, bondPercentage] = useMemo(
     () => [
-      api.consts.treasury.proposalBondMinimum
-        ? (api.consts.treasury.proposalBondMinimum as u128).toString()
-        : null,
+      (api.consts.treasury.proposalBondMinimum as u128).toString(),
       (api.consts.treasury.proposalBondMaximum as Option<u128>)?.isSome
         ? (api.consts.treasury.proposalBondMaximum as Option<u128>).unwrap().toString()
         : null,
-      api.consts.treasury.proposalBond
-        ? `${(api.consts.treasury.proposalBond as Permill).mul(BN_HUNDRED).div(BN_MILLION).toNumber().toFixed(2)}%`
-        : `${new BN(0).toNumber().toFixed(2)}%`
+      `${(api.consts.treasury.proposalBond as Permill).mul(BN_HUNDRED).div(BN_MILLION).toNumber().toFixed(2)}%`
     ],
     [api]
   );
@@ -86,13 +83,11 @@ function Propose ({ className }: Props): React.ReactElement<Props> | null {
               >
                 {bondPercentage}
               </Static>
-              {bondMin && (
-                <InputBalance
-                  defaultValue={bondMin}
-                  isDisabled
-                  label={t('minimum bond')}
-                />
-              )}
+              <InputBalance
+                defaultValue={bondMin}
+                isDisabled
+                label={t('minimum bond')}
+              />
               {bondMax && (
                 <InputBalance
                   defaultValue={bondMax}
@@ -111,7 +106,7 @@ function Propose ({ className }: Props): React.ReactElement<Props> | null {
               label={t('Submit proposal')}
               onStart={toggleOpen}
               params={[value, beneficiary]}
-              tx={api.tx.treasury.spendLocal ?? api.tx.treasury.proposeSpend}
+              tx={api.tx.treasury.proposeSpend}
             />
           </Modal.Actions>
         </Modal>

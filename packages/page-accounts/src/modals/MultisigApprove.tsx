@@ -79,7 +79,6 @@ function MultisigApprove ({ className = '', onClose, ongoing, threshold = 0, who
       isMultiCall: !!multisig && (multisig.approvals.length + 1) >= threshold,
       multisig
     });
-    setCallHex('');
     setCallData(EMPTY_CALL);
   }, [hash, ongoing, threshold]);
 
@@ -174,7 +173,7 @@ function MultisigApprove ({ className = '', onClose, ongoing, threshold = 0, who
         <Modal.Columns hint={t('The call hash from the list of available and unapproved calls.')}>
           <Dropdown
             label={t('pending hashes {{count}}', {
-              replace: { count: `(${hashes.length})` }
+              replace: { count: hashes.length }
             })}
             onChange={setHash}
             options={hashes}
@@ -232,29 +231,27 @@ function MultisigApprove ({ className = '', onClose, ongoing, threshold = 0, who
               <>
                 {isCallOverride && (
                   <Modal.Columns hint={t('The call data for this transaction matching the hash. Once sent, the multisig will be executed against this.')}>
-                    <Input
-                      autoFocus
-                      isError={!callHex || !!callError}
-                      label={t('call data for final approval')}
-                      onChange={setCallHex}
-                      value={callHex}
-                    />
-                    {callData && callInfo &&
-                       (
-                         <div style={{ marginTop: 8 }}>
-                           <Expander
-                             isPadded
-                             summary={`${callInfo.section}.${callInfo.method}`}
-                             summaryMeta={callInfo.meta}
-                           >
-                             <CallDisplay
-                               className='details'
-                               value={callData}
-                             />
-                           </Expander>
-                         </div>
-                       )
-                    }
+                    {callData && callInfo
+                      ? (
+                        <Expander
+                          isPadded
+                          summary={`${callInfo.section}.${callInfo.method}`}
+                          summaryMeta={callInfo.meta}
+                        >
+                          <CallDisplay
+                            className='details'
+                            value={callData}
+                          />
+                        </Expander>
+                      )
+                      : (
+                        <Input
+                          autoFocus
+                          isError={!callHex || !!callError}
+                          label={t('call data for final approval')}
+                          onChange={setCallHex}
+                        />
+                      )}
                     {callError && (
                       <MarkError content={callError} />
                     )}
@@ -293,8 +290,7 @@ function MultisigApprove ({ className = '', onClose, ongoing, threshold = 0, who
 
 const StyledModal = styled(Modal)`
   .tipToggle {
-    width: fit-content;
-    float: right;
+    width: 100%;
     text-align: right;
   }
 `;

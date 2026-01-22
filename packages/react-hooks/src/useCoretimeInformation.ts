@@ -7,11 +7,10 @@ import type { ChainInformation, CoretimeInformation, CoreWorkload, CoreWorkloadI
 import { useEffect, useMemo, useState } from 'react';
 
 import { createNamedHook, useApi, useBrokerConfig, useBrokerLeases, useBrokerReservations, useBrokerSalesInfo, useBrokerStatus, useCoreDescriptor, useRegions, useWorkloadInfos, useWorkplanInfos } from '@polkadot/react-hooks';
-import { BN, BN_ZERO } from '@polkadot/util';
+import { BN } from '@polkadot/util';
 
-import { ChainRenewalStatus, CoreTimeTypes } from './constants.js';
+import { ChainRenewalStatus, CoreTimeChainConsts, CoreTimeTypes } from './types.js';
 import { useBrokerPotentialRenewals } from './useBrokerPotentialRenewals.js';
-import { useCoretimeConsts } from './useCoretimeConsts.js';
 
 const getOccupancyType = (lease: LegacyLease | undefined, reservation: Reservation | undefined, isPool: boolean): CoreTimeTypes => {
   if (isPool) {
@@ -26,7 +25,6 @@ function useCoretimeInformationImpl (api: ApiPromise, ready: boolean): CoretimeI
 
   const [workloadData, setWorkloadData] = useState<CoreWorkload[]>([]);
   const [taskIds, setTaskIds] = useState<number[]>([]);
-  const [blocksPerTimesliceCoretimeChain, setBlocksPerTimesliceCoretimeChain] = useState<BN | undefined>();
 
   /** coretime API calls */
   const status = useBrokerStatus(apiCoretime, isApiReady);
@@ -38,32 +36,22 @@ function useCoretimeInformationImpl (api: ApiPromise, ready: boolean): CoretimeI
   const config = useBrokerConfig(apiCoretime, isApiReady);
   const potentialRenewals = useBrokerPotentialRenewals(apiCoretime, isApiReady);
   const region = useRegions(apiCoretime);
-  const coretimeConstants = useCoretimeConsts();
 
-  /** Coretime constants */
-  useEffect(() => {
-    if (!coretimeConstants?.coretime.blocksPerTimeslice) {
-      return;
-    }
-
-    setBlocksPerTimesliceCoretimeChain(new BN(coretimeConstants.coretime.blocksPerTimeslice));
-  }, [coretimeConstants]);
-  /** *******************/
-
+  /** Other APIs */
   const coreInfos = useCoreDescriptor(api, ready);
   const paraIds = useMemo(() => coreInfos && [...new Set(coreInfos?.map((a) => a.info.currentWork.assignments.map((ass) => ass.task)).flat().filter((id) => id !== 'Pool'))], [coreInfos]);
 
   const isInterludePhase = useMemo(() => {
-    if (!salesInfo || !config || !status || !blocksPerTimesliceCoretimeChain) {
+    if (!salesInfo || !config || !status) {
       return false;
     }
 
     const currentRegionStart = new BN(salesInfo?.regionBegin).sub(new BN(config.regionLength));
-    const interludeLengthTs = blocksPerTimesliceCoretimeChain.gt(BN_ZERO) ? new BN(config?.interludeLength).div(blocksPerTimesliceCoretimeChain) : BN_ZERO;
+    const interludeLengthTs = new BN(config?.interludeLength).div(new BN(CoreTimeChainConsts.BlocksPerTimeslice));
     const interludeEndTs = currentRegionStart.add(interludeLengthTs);
 
     return interludeEndTs.gte(new BN(status?.lastCommittedTimeslice));
-  }, [status, salesInfo, config, blocksPerTimesliceCoretimeChain]);
+  }, [status, salesInfo, config]);
 
   const potentialRenewalsCurrentRegion = useMemo(() => {
     if (!isInterludePhase || !config || !salesInfo) {
@@ -77,21 +65,16 @@ function useCoretimeInformationImpl (api: ApiPromise, ready: boolean): CoretimeI
   const [state, setState] = useState<CoretimeInformation | undefined>();
 
   useEffect(() => {
-    if (paraIds?.length && !taskIds.length) {
+    if (paraIds?.length && potentialRenewals?.length && !taskIds.length) {
       const simpleIds = paraIds.map((p) => Number(p));
       const renewalIds = potentialRenewals?.map((r) => Number(r.task));
+      const numbers = [...new Set(simpleIds.concat(renewalIds))];
 
-      if (renewalIds) {
-        const numbers = [...new Set(simpleIds.concat(renewalIds))];
-
-        if (numbers?.length > simpleIds.length) {
-          setTaskIds(numbers.sort((a, b) => a - b));
-
-          return;
-        }
+      if (numbers?.length > simpleIds.length) {
+        setTaskIds(numbers.sort((a, b) => a - b));
+      } else {
+        setTaskIds(simpleIds);
       }
-
-      setTaskIds(simpleIds);
     }
   }, [potentialRenewals, paraIds, taskIds]);
 
@@ -119,7 +102,7 @@ function useCoretimeInformationImpl (api: ApiPromise, ready: boolean): CoretimeI
   }, [workloads, coreInfos]);
 
   useEffect((): void => {
-    if (!workloadData?.length || !reservations?.length || !coretimeConstants) {
+    if (!workloadData?.length || !leases?.length || !reservations?.length) {
       return;
     }
 
@@ -127,41 +110,21 @@ function useCoretimeInformationImpl (api: ApiPromise, ready: boolean): CoretimeI
 
     taskIds?.forEach((id) => {
       const taskId = id.toString();
-      const lease = leases?.length ? leases?.find((lease) => lease.task === taskId) : undefined;
+      const lease = leases?.find((lease) => lease.task === taskId);
       const reservation = reservations?.find((reservation) => reservation.task === taskId);
       const workloads = workloadData?.filter((one) => one.info.task === taskId);
 
       const workTaskInfo = workloads.map((workload) => {
-        // parachain can be renewed on a different core
-        const workplan = workplans?.filter((workplan) => workplan.info.task.toString() === taskId);
+        const workplan = workplans?.filter((workplan) => workplan.core === workload?.core && workplan.info.task.toString() === taskId);
         const type = getOccupancyType(lease, reservation, workload?.info.isPool ?? false);
-
-        const potentialRenewal = potentialRenewalsCurrentRegion?.find((renewal) => renewal.task.toString() === taskId);
-
-        const chainRenewedCore = type === CoreTimeTypes['Bulk Coretime'] && !!workplan?.length;
-
-        let renewalStatus = ChainRenewalStatus.None;
-        let renewalStatusMessage = '';
-
-        if (potentialRenewal) {
-          renewalStatus = ChainRenewalStatus.Eligible;
-        }
-
-        if (chainRenewedCore) {
-          renewalStatus = ChainRenewalStatus.Renewed;
-          renewalStatusMessage = `Next cycle on core ${workplan[0].core}`;
-        }
-
-        const chainRegionEnd = (renewalStatus === ChainRenewalStatus.Renewed ? salesInfo?.regionEnd : salesInfo?.regionBegin);
-        const targetTimeslice = lease?.until || chainRegionEnd;
-
-        const lastBlock = targetTimeslice ? targetTimeslice * coretimeConstants?.relay.blocksPerTimeslice : 0;
+        const chainRenewedCore = type === CoreTimeTypes['Bulk Coretime'] && workplan?.find((a) => a.core === workload?.core);
+        const renewal = potentialRenewalsCurrentRegion?.find((renewal) => renewal.task.toString() === taskId);
+        const renewalStatus = chainRenewedCore ? ChainRenewalStatus.Renewed : renewal ? ChainRenewalStatus.Eligible : ChainRenewalStatus.None;
 
         return {
-          lastBlock,
-          renewal: potentialRenewal,
+          chainRenewedCore,
+          renewal,
           renewalStatus,
-          renewalStatusMessage,
           type,
           workload,
           workplan
@@ -176,30 +139,17 @@ function useCoretimeInformationImpl (api: ApiPromise, ready: boolean): CoretimeI
       };
     });
 
-    if (chainInfo && config && region && salesInfo && status && coretimeConstants) {
+    if (chainInfo && config && region && salesInfo && status) {
       setState({
         chainInfo,
         config,
-        constants: coretimeConstants,
         region,
         salesInfo,
         status,
         taskIds
       });
     }
-  }, [
-    config,
-    coretimeConstants,
-    taskIds,
-    workloadData,
-    potentialRenewalsCurrentRegion,
-    salesInfo,
-    leases,
-    reservations,
-    region,
-    status,
-    workplans
-  ]);
+  }, [taskIds, workloadData, potentialRenewalsCurrentRegion, salesInfo, leases, reservations, region, status, config, workplans]);
 
   return state;
 }

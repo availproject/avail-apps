@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DeriveCollectiveProposal } from '@polkadot/api-derive/types';
-import type { PalletBountiesBountyStatus } from '@polkadot/types/lookup';
+import type { BountyStatus } from '@polkadot/types/interfaces';
 
 import React, { useRef } from 'react';
 
@@ -14,7 +14,7 @@ import { useTranslation } from '../translate.js';
 interface Props {
   className?: string;
   proposal: DeriveCollectiveProposal;
-  status: PalletBountiesBountyStatus;
+  status: BountyStatus;
 }
 
 function VotingDescriptionInfo ({ className, proposal, status }: Props): React.ReactElement<Props> {

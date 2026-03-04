@@ -16379,7 +16379,9 @@ export const typesBundle = {
                 "V4": "V4HeaderExtension"
               }
             },
-            "FriParamsVersion": "u8",
+            "FriParamsVersion": {
+              "_enum": [ "V0" ]
+            },
             "FriBlobCommitment": {
               "blobHash": "H256",
               "sizeBytes": "u64",

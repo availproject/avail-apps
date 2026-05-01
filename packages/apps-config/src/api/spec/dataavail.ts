@@ -89,39 +89,9 @@ const definitions: OverrideBundleDefinition = {
       minmax: [0, undefined],
       types: {
         AppId: 'Compact<u32>',
-        DataLookupItem: {
-          appId: 'AppId',
-          start: 'Compact<u32>'
+        FriParamsVersion: {
+          _enum: ['V0']
         },
-        CompactDataLookup: {
-          size: 'Compact<u32>',
-          index: 'Vec<DataLookupItem>'
-        },
-        CompactDataLookupV4: {
-          size: 'Compact<u32>',
-          index: 'Vec<DataLookupItem>',
-          rowsPerTx: 'Vec<u16>'
-        },
-        KateCommitment: {
-          rows: 'Compact<u16>',
-          cols: 'Compact<u16>',
-          commitment: 'Vec<u8>',
-          dataRoot: 'H256'
-        },
-        V3HeaderExtension: {
-          appLookup: 'CompactDataLookup',
-          commitment: 'KateCommitment'
-        },
-        V4HeaderExtension: {
-          appLookup: 'CompactDataLookupV4',
-          commitment: 'KateCommitment'
-        },
-        KzgHeader: {
-          _enum: {
-            V4: 'V4HeaderExtension'
-          }
-        },
-        FriParamsVersion: 'u8',
         FriBlobCommitment: {
           blobHash: 'H256',
           sizeBytes: 'u64',
@@ -132,15 +102,9 @@ const definitions: OverrideBundleDefinition = {
           dataRoot: 'H256',
           paramsVersion: 'FriParamsVersion'
         },
-        FriHeader: {
-          _enum: {
-            V1: 'FriV1HeaderExtension'
-          }
-        },
         HeaderExtension: {
           _enum: {
-            Kzg: 'KzgHeader',
-            Fri: 'FriHeader'
+            V1: 'FriV1HeaderExtension'
           }
         },
         DaHeader: {

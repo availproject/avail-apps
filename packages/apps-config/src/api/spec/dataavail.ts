@@ -8,24 +8,27 @@ import type { OverrideBundleDefinition } from '@polkadot/types/types';
 
 const definitions: OverrideBundleDefinition = {
   rpc: {
-    kate: {
-      blockLength: {
-        description: 'Get Block Length',
+    blob: {
+      submitBlob: {
+        description: 'Submit a blob and its signed metadata transaction',
         params: [
           {
-            name: 'at',
-            type: 'Hash',
-            isOptional: true
+            name: 'metadata_signed_transaction',
+            type: 'String'
+          },
+          {
+            name: 'blob',
+            type: 'String'
           }
         ],
-        type: 'BlockLength'
+        type: 'Null'
       },
-      queryProof: {
-        description: 'Generate the kate proof for the given `cells`',
+      getBlob: {
+        description: 'Get blob data by blob hash',
         params: [
           {
-            name: 'cells',
-            type: 'Vec<Cell>'
+            name: 'blob_hash',
+            type: 'H256'
           },
           {
             name: 'at',
@@ -33,10 +36,46 @@ const definitions: OverrideBundleDefinition = {
             isOptional: true
           }
         ],
-        type: 'Vec<u8>'
+        type: 'Blob'
       },
-      queryAppData: {
-        description: 'Fetches app data rows for the given app',
+      getBlobInfo: {
+        description: 'Get blob inclusion and ownership information',
+        params: [
+          {
+            name: 'blob_hash',
+            type: 'H256'
+          }
+        ],
+        type: 'BlobInfo'
+      },
+      inclusionProof: {
+        description: 'Generate the inclusion proof for the given blob hash',
+        params: [
+          {
+            name: 'blob_hash',
+            type: 'H256'
+          },
+          {
+            name: 'at',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'DataProof'
+      },
+      getBlobsSummary: {
+        description: 'Get included blob summaries for a block',
+        params: [
+          {
+            name: 'at',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<BlobSummary>'
+      },
+      getBlobsByAppId: {
+        description: 'Get blob hashes for an AppId in a block',
         params: [
           {
             name: 'app_id',
@@ -48,15 +87,14 @@ const definitions: OverrideBundleDefinition = {
             isOptional: true
           }
         ],
-        type: 'Vec<Option<Vec<u8>>>'
+        type: 'Vec<H256>'
       },
-
-      queryDataProof: {
-        description: 'Generate the data proof for the given `transaction_index`',
+      getEvalData: {
+        description: 'Get FRI evaluation data for a blob',
         params: [
           {
-            name: 'transaction_index',
-            type: 'u32'
+            name: 'blob_hash',
+            type: 'H256'
           },
           {
             name: 'at',
@@ -64,9 +102,30 @@ const definitions: OverrideBundleDefinition = {
             isOptional: true
           }
         ],
-        type: 'DataProof'
+        type: 'BlobEvalData'
       },
-      queryDataProofV2: {
+      getSamplingProof: {
+        description: 'Get FRI sampling proofs for blob cells',
+        params: [
+          {
+            name: 'cells',
+            type: 'Vec<u32>'
+          },
+          {
+            name: 'blob_hash',
+            type: 'H256'
+          },
+          {
+            name: 'at',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<SamplingProof>'
+      }
+    },
+    bridge: {
+      queryDataProof: {
         description: 'Generate the data proof for the given `transaction_index`',
         params: [
           {
@@ -179,6 +238,39 @@ const definitions: OverrideBundleDefinition = {
         },
         BoundedData: 'Vec<u8>',
         ArbitraryMessage: 'BoundedData',
+        Blob: {
+          blobHash: 'H256',
+          data: 'Vec<u8>',
+          size: 'u64'
+        },
+        OwnershipEntry: {
+          address: 'AccountId32',
+          babeKey: 'AuthorityId',
+          encodedPeerId: 'String',
+          signature: 'Vec<u8>'
+        },
+        BlobInfo: {
+          hash: 'H256',
+          blockHash: 'H256',
+          blockNumber: 'u32',
+          ownership: 'Vec<OwnershipEntry>'
+        },
+        BlobSummary: {
+          hash: 'H256',
+          txIndex: 'u32',
+          appId: 'AppId',
+          sizeBytes: 'u64'
+        },
+        BlobEvalData: {
+          evalPointSeed: '[u8; 32]',
+          evalClaim: '[u8; 16]',
+          evalProof: 'Vec<u8>'
+        },
+        SamplingProof: {
+          index: 'u32',
+          cell: 'Vec<u8>',
+          proof: 'Vec<u8>'
+        },
         Cell: {
           row: 'BlockLengthRows',
           col: 'BlockLengthColumns'

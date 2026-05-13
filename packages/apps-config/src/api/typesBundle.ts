@@ -16434,8 +16434,8 @@ export const typesBundle = {
             },
             "FriV1HeaderExtension": {
               "blobs": "Vec<FriBlobCommitment>",
-              "dataRoot": "H256",
-              "paramsVersion": "FriParamsVersion"
+              "paramsVersion": "FriParamsVersion",
+              "dataRoot": "H256"
             },
             "HeaderExtension": {
               "_enum": {
@@ -22923,8 +22923,8 @@ export const typesBundle = {
             },
             "FriV1HeaderExtension": {
               "blobs": "Vec<FriBlobCommitment>",
-              "dataRoot": "H256",
-              "paramsVersion": "FriParamsVersion"
+              "paramsVersion": "FriParamsVersion",
+              "dataRoot": "H256"
             },
             "HeaderExtension": {
               "_enum": {

@@ -158,8 +158,8 @@ const definitions: OverrideBundleDefinition = {
         },
         FriV1HeaderExtension: {
           blobs: 'Vec<FriBlobCommitment>',
-          dataRoot: 'H256',
-          paramsVersion: 'FriParamsVersion'
+          paramsVersion: 'FriParamsVersion',
+          dataRoot: 'H256'
         },
         HeaderExtension: {
           _enum: {

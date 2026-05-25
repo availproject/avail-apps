@@ -28,7 +28,7 @@ const DEFAULT_PARAMS: InflationParams = {
 };
 
 const CERE_NETWORK_INFLATION_PARAMS = { ...DEFAULT_PARAMS, maxInflation: 0.05, minInflation: 0.0001, stakeTarget: 0.2 };
-const AVAIL_NETWORK_INFLATION_PARAMS = { ...DEFAULT_PARAMS, maxInflation: 0.05, minInflation: 0.01, stakeTarget: 0.75 };
+const AVAIL_NETWORK_INFLATION_PARAMS = { ...DEFAULT_PARAMS, maxInflation: 0.05, minInflation: 0.01, stakeTarget: 0.5 };
 
 const VARA_NETWORK_INFLATION_PARAMS = { ...DEFAULT_PARAMS, maxInflation: 0, minInflation: 0.0001, stakeTarget: 0.85 };
 

@@ -10,7 +10,7 @@ jobs:
   build_explorer:
     runs-on: ubuntu-latest
     steps:
-         - uses: actions/checkout@v4
+         - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
          - name: build avail explorer via yarn
            shell: bash
            run: |
@@ -19,7 +19,7 @@ jobs:
             pushd /home/runner/work/avail-apps/avail-apps/packages/apps/
             tar czf avail-explorer.tar.gz build/
             popd
-         - uses: actions/upload-artifact@v4
+         - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
            with:
              name: avail-explorer
              path: /home/runner/work/avail-apps/avail-apps/packages/apps/avail-explorer.tar.gz
@@ -30,29 +30,29 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4.0.0
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
       - name: Prepare
         id: prepare
         run: |
             TAG=${GITHUB_REF#refs/tags/}
-            echo ::set-output name=tag_name::${TAG}
+            echo "tag_name=${TAG}" >> "$GITHUB_OUTPUT"
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -70,12 +70,12 @@ jobs:
     environment: prod
     steps:
       - name: Set up Kubectl
-        uses: azure/setup-kubectl@v1
+        uses: azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d # v5.1.0
         with:
           version: 'v1.29.2'
     
       - name: Configure Kubernetes Context
-        uses: azure/k8s-set-context@v1
+        uses: azure/k8s-set-context@89b837d75b40a7bd2ddafde837473c212db8b313 # v5.0.0
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
    

@@ -27,7 +27,7 @@ jobs:
   # build image and publish to dockerhub
   docker_build_push:
     needs: [build_explorer]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,7 +66,7 @@ jobs:
 
   k8s_deployment:
     needs: [docker_build_push]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     environment: prod
     steps:
       - name: Set up Kubectl

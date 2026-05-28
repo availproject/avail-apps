@@ -30,13 +30,39 @@ const NOOP = () => undefined;
 
 const AVAIL_STATUS = ['queued', 'qr', 'signing'];
 
+async function withSafeDataProofJson<T> (api: ApiPromise, call: () => Promise<T>): Promise<T> {
+  const ws = (api as unknown as { _rpcCore?: { provider?: { __internal__websocket?: WebSocket | null } } })._rpcCore?.provider?.__internal__websocket;
+  const onmessage = ws?.onmessage;
+
+  if (ws && onmessage) {
+    ws.onmessage = (event: MessageEvent<string>): void => {
+      onmessage.call(ws, {
+        ...event,
+        data: event.data
+          .replace(/"id":(\d{16,})/g, '"id":"$1"')
+          .replace(/"amount":(\d{16,})/g, '"amount":"$1"')
+      });
+    };
+  }
+
+  try {
+    return await call();
+  } finally {
+    if (ws && onmessage) {
+      ws.onmessage = onmessage;
+    }
+  }
+}
+
 async function submitRpc (api: ApiPromise, { method, section }: DefinitionRpcExt, values: unknown[]): Promise<QueueTxResult> {
   try {
     const rpc = api.rpc as unknown as Record<string, Record<string, (...params: unknown[]) => Promise<unknown>>>;
 
     assert(isFunction(rpc[section]?.[method]), `api.rpc.${section}.${method} does not exist`);
 
-    const result = await rpc[section][method](...values);
+    const result = section === 'kate' && method === 'queryDataProof'
+      ? await withSafeDataProofJson(api, () => rpc[section][method](...values))
+      : await rpc[section][method](...values);
 
     console.log('submitRpc: result ::', loggerFormat(result));
 

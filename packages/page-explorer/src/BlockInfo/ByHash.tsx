@@ -1,4 +1,4 @@
-// Copyright 2017-2025 @polkadot/app-explorer authors & contributors
+// Copyright 2017-2026 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 /* eslint-disable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */

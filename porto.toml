@@ -1,0 +1,18 @@
+# Porto app node/mainnet/explorer (fra1). Static polkadot-js apps build served by nginx.
+# Build args TURING_URL/MAINNET_URL are left unset: the code defaults are the public endpoints.
+dockerfile = "docker/Dockerfile"
+service_level = "mainnet"
+
+[network]
+port = 80
+extra_domains = ["explorer.avail.sh", "explorer.availproject.org"]
+
+[deploy]
+health_path = "/"
+chart_version = 132
+
+[resources]
+cpu_request = "50m"
+cpu_limit = "500m"
+memory_request = "384Mi"
+memory_limit = "768Mi"
